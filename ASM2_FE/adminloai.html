@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang Admin</title>
+    <link rel="stylesheet" href="./public/stylesheets/admintour.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <img src="./public/images/logo1.png" alt="">
+        </div>
+        <ul class="menu">
+            <li>
+                <a href="">
+                    <ion-icon name="home-outline"></ion-icon>
+                    <span>Trang chủ</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="airplane-outline"></ion-icon>
+                    <span>Tour</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="library-outline"></ion-icon>
+                    <span>Loại tour</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="person-circle-outline"></ion-icon>
+                    <span>Khách hàng</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="chatbox-outline"></ion-icon>
+                    <span>Bình luận</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <ion-icon name="cellular-outline"></ion-icon>
+                    <span>Thống kê</span>
+                </a>
+            </li>
+            <li class="logout">
+                <a href="" >
+                    <ion-icon name="exit-outline"></ion-icon>
+                    <span>Thoát</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="main--content">
+        <div class="header--wrapper">
+            <div class="header--title">
+                <span>Primary</span>
+                <h1>Tour</h1>
+            </div>
+            <div class="user--info">
+                <div class="box-search">
+                    <ion-icon name="search-outline"></ion-icon>
+                    <input type="text" placeholder="Tìm Kiếm">
+                </div>
+                <img src="./public/images/avthuy.jpg" alt="">
+            </div>
+        </div>
+        <div class="main--wrapper">
+            <div class="table--container">
+                 <div class="btn-addTour "><a href="./formad.html" >Thêm Tour</a></div>
+                <table >
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Id loại tour</th>
+                            <th>Tên</th>
+                            <th>Thứ Tự</th>
+                            <th>Hành động</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody id="tour-admin">
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    fetch("http://localhost:3000/admin/loai").then(r => r.json()).then(data => {
+    let str =`  
+    <tr>
+        <td>1</td>
+        <td></td>
+        <td>Tour trong nước</td>
+        <td>1</td>
+        <td></td>
+    </tr> 
+    <tr>
+        <td>2</td>
+        <td></td>
+        <td>Tour ngoài nước</td>
+        <td>1</td>
+        <td></td>
+    </tr> 
+    `;
+        // console.log(data);
+        data.forEach(data => str+= show1loaiadmin(data));
+        document.querySelector("#tour-admin").innerHTML=str
+})
+
+const show1loaiadmin = (data) =>{
+    return `
+    <tr>
+        <td>${data.id}</td>
+        <td>${data.id_loaitour}</td>
+        <td>${data.name}</td>
+        <td>${data.thu_tu}</td>
+        <td>
+            <button type="button"><a href='formupdate.html?id=${data.id}'><ion-icon name="construct-outline"></ion-icon></a></button> |
+            <button onclick='xoatour(${data.id})' type="button"><ion-icon name="trash-outline"></ion-icon></button>
+        </td>
+    </tr> 
+    `
+}
+
+//xóa tour 
+const xoatour =(id) =>{
+    let hoi = confirm(`bạn có muốn xóa không`)
+    if(hoi==false) return;
+    fetch(`http://localhost:3000/admin/tour/${id}`,{method:"delete"})
+    .then(r => r.json()).then(data =>{
+        document.location=`admintour.html`
+    })
+}
+</script>
+
+</html>
